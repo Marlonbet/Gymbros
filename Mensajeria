@@ -1,1 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plataforma de Mensajería (sin persistencia)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
 
+    .chat-container {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 400px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-box {
+      flex-grow: 1;
+      margin-bottom: 10px;
+      padding: 10px;
+      background-color: #fafafa;
+      border: 1px solid #ddd;
+      overflow-y: auto;
+      height: 300px;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      resize: none;
+    }
+
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-box" id="chat-box"></div>
+    <textarea id="message-input" placeholder="Escribe un mensaje..."></textarea>
+    <button onclick="sendMessage()">Enviar</button>
+  </div>
+
+  <script>
+    // Crear un canal de comunicación entre pestañas del mismo navegador
+    const channel = new BroadcastChannel('chat_channel');
+
+    // Obtener elementos del DOM
+    const messageInput = document.getElementById('message-input');
+    const chatBox = document.getElementById('chat-box');
+
+    // Función para enviar un mensaje
+    function sendMessage() {
+      const message = messageInput.value.trim();
+      if (message) {
+        // Enviar el mensaje a través del canal
+        channel.postMessage({ text: message });
+        messageInput.value = ''; // Limpiar el campo de entrada
+        console.log('Mensaje enviado:', message); // Verificar que el mensaje se está enviando
+      }
+    }
+
+    // Escuchar mensajes en el canal
+    channel.onmessage = function(event) {
+      console.log('Mensaje recibido:', event.data); // Verificar que el mensaje se está recibiendo
+      const message = event.data.text;
+
+      // Crear un nuevo elemento para el mensaje
+      const messageElement = document.createElement('div');
+      messageElement.textContent = message;
+
+      // Establecer algunos estilos para los mensajes (opcional)
+      messageElement.style.padding = '5px';
+      messageElement.style.borderBottom = '1px solid #ddd';
+
+      // Agregar el mensaje al chat-box
+      chatBox.appendChild(messageElement);
+
+      // Asegurarnos de que el chat siempre se desplace hacia el fondo cuando haya nuevos mensajes
+      chatBox.scrollTop = chatBox.scrollHeight;
+    };
+
+    // Cuando la página se cierra o recarga, el canal se cierra
+    window.onbeforeunload = () => {
+      channel.close();
+    };
+  </script>
+</body>
+</html>
