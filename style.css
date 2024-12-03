@@ -90,8 +90,8 @@ main {
     transform: scale(1.1);
 }
 
-/* Botón Añadir Ejercicio */
-#add-exercise-btn {
+/* Botón Editar */
+#edit-exercise-btn {
     background-color: #3498db;
     color: white;
     border: none;
@@ -103,7 +103,7 @@ main {
     transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-#add-exercise-btn:hover {
+#edit-exercise-btn:hover {
     background-color: #2980b9;
     transform: scale(1.05);
 }
