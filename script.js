@@ -1,49 +1,18 @@
-// Simulación de datos iniciales
-let workoutData = JSON.parse(localStorage.getItem("workoutData")) || {
-    lunes: ["Pecho y tríceps"],
-    martes: ["Espalda y bíceps"],
-    miércoles: ["Tren Inferior"],
-    jueves: ["Hombros y trapecio(abdomen opcional)"],
-    viernes: ["Pecho y Espalda(día mixto)"],
-};
+// Botón de edición
+document.getElementById('edit-exercise-btn').addEventListener('click', function () {
+    const newRoutine = prompt(
+        'Edita tu rutina semanal (separa los días con comas, ejemplo: Lunes: Cardio, Martes: Piernas, etc.):'
+    );
 
-// Cargar rutinas
-function renderRoutine() {
-    const routineList = document.getElementById("routine-list");
-    routineList.innerHTML = ""; // Limpia la lista actual
-    Object.keys(workoutData).forEach((day) => {
-        const dayItem = document.createElement("li");
-        dayItem.innerHTML = `
-            <strong>${day.charAt(0).toUpperCase() + day.slice(1)}:</strong> 
-            ${workoutData[day].join(", ")}
-        `;
-        routineList.appendChild(dayItem);
-    });
-}
+    if (newRoutine) {
+        const routineList = document.getElementById('routine-list');
+        routineList.innerHTML = ''; // Limpiar la lista actual
 
-// Comprobar mensajes actualizados y cambiar icono
-function checkMessages() {
-    const messagesUpdated = JSON.parse(localStorage.getItem("messagesUpdated"));
-    const inboxIcon = document.getElementById("inbox-icon");
-    if (messagesUpdated) {
-        inboxIcon.textContent = "📬"; // Mensajes nuevos
-    } else {
-        inboxIcon.textContent = "📭"; // Sin mensajes nuevos
-    }
-}
-
-// Inicializar
-document.addEventListener("DOMContentLoaded", () => {
-    renderRoutine();
-    checkMessages();
-});
-
-// Simulación de añadir ejercicio (puedes expandirlo)
-document.getElementById("add-exercise-btn").addEventListener("click", () => {
-    const newExercise = prompt("Escribe un nuevo ejercicio:");
-    if (newExercise) {
-        workoutData.lunes.push(newExercise); // Añade al lunes por defecto
-        localStorage.setItem("workoutData", JSON.stringify(workoutData));
-        renderRoutine();
+        const exercises = newRoutine.split(','); // Dividir los días por comas
+        exercises.forEach(exercise => {
+            const li = document.createElement('li');
+            li.innerHTML = `<strong>${exercise.split(':')[0].trim()}:</strong> ${exercise.split(':')[1].trim()}`;
+            routineList.appendChild(li);
+        });
     }
 });
