@@ -3,9 +3,9 @@ let predefinedMessage = "Este es un mensaje predeterminado que solo puede ser ed
 
 // Simulación de mensajes iniciales
 let messages = JSON.parse(localStorage.getItem("messages")) || [
-    "Mensaje 1: Recordatorio de entrenamiento.",
-    "Mensaje 2: Nueva rutina disponible.",
-    "Mensaje 3: Consejo de nutrición."
+    "Lunes:Press plano, press inclinado, fondos en paralelas o mecánicas.",
+    "Tríceps: Tríceps con barra en banco plano, tríceps con mancuernas y en polea alta.",
+    
 ];
 
 // Renderizar mensajes
